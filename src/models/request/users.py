@@ -8,6 +8,6 @@ class Login(BaseModel):
 
 class SignUp(BaseModel):
     email: EmailStr
-    firstName: str
+    firstname: str
     password: str
     confirmPassword: str

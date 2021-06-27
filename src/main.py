@@ -2,6 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.routers import users, workouts
 
+from src.database import schemas, engine
+
+# init database
+schemas.Base.metadata.create_all(bind=engine)
+
 origins = ["*"]
 
 app = FastAPI()
