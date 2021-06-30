@@ -10,6 +10,7 @@ def create_user(db: Session, user: users.UserCreate):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    return new_user
 
 
 def get_user(db: Session, user_id: int):
