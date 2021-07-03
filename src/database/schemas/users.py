@@ -1,8 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-
-from src.database import Base
+from ..database import Base
 
 
 class User(Base):
@@ -12,3 +11,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     firstname = Column(String)
     hashed_password = Column(String)
+
+    workouts = relationship("Workout", back_populates="user")
+    workout_templates = relationship("WorkoutTemplates", back_populates="user")
+    account = relationship("Account", back_populates="user", uselist=False)

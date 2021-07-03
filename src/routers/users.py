@@ -13,6 +13,7 @@ from src.database import SessionLocal, engine
 from src.database.models.users import UserCreate, UserBase
 from src.utils import create_access_token
 from src.models.response import token
+from src.middleware import auth
 
 router = APIRouter()
 
@@ -29,8 +30,8 @@ def get_db():
 
 
 @router.get("/")
-async def get_user(access_token: Optional[str] = Cookie(None)):
-    return {"ads_id": access_token}
+async def get_user(current_user=Depends(auth.get_current_user)):
+    print('hi')
 
 
 @router.post("/token", response_model=token.Token)
@@ -44,8 +45,8 @@ async def login_user(response: Response, db: Session = Depends(get_db), form_dat
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    response.set_cookie(key="access_token",
-                        value=f"bearer {access_token}", httponly=True)
+    # response.set_cookie(key="access_token",
+    #                     value=f"bearer {access_token}", httponly=True)
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -62,6 +63,6 @@ async def signup_user(response: Response, user: SignUp, db: Session = Depends(ge
     access_token = create_access_token(
         data={"sub": db_user.email}, expires_delta=access_token_expires
     )
-    response.set_cookie(key="access_token",
-                        value=f"bearer {access_token}", httponly=True)
+    # response.set_cookie(key="access_token",
+    #                     value=f"bearer {access_token}", httponly=True)
     return {"access_token": access_token, "token_type": "bearer"}
