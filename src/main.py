@@ -21,16 +21,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.middleware("http")
-async def add_auth_header(request: Request, call_next):
-    print(request.cookies.get('connect.sid'))
-    response = await call_next(request) 
-    return response
-
-
 # other routes
 app.include_router(router=users.router, prefix='/api/users')
-app.include_router(router=workouts.router, prefix='/api/workouts')
-app.include_router(router=sets.router, prefix='/api/sets')
-app.include_router(router=exercises.router, prefix='/api/exercises')
 app.include_router(router=templates.router, prefix='/api/templates')
+app.include_router(router=workouts.router, prefix='/api/workouts')
+app.include_router(router=exercises.router, prefix='/api/exercises')
+app.include_router(router=sets.router, prefix='/api/sets')

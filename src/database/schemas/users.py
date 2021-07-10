@@ -1,6 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
+from .accounts import Account
 from ..database import Base
 
 
@@ -13,5 +14,5 @@ class User(Base):
     hashed_password = Column(String)
 
     workouts = relationship("Workout", back_populates="user")
-    workout_templates = relationship("WorkoutTemplates", back_populates="user")
+    workout_templates = relationship("WorkoutTemplate", back_populates="user")
     account = relationship("Account", back_populates="user", uselist=False)

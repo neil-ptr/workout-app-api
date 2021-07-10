@@ -5,12 +5,12 @@ from src.database import schemas
 
 
 def create_user(db: Session, user: users.UserCreate):
-    new_user = schemas.User(
+    newUser = schemas.User(
         email=user.email, hashed_password=user.hash, firstname=user.firstname)
-    db.add(new_user)
+    db.add(newUser)
     db.commit()
-    db.refresh(new_user)
-    return new_user
+    db.refresh(newUser)
+    return newUser
 
 
 def get_user(db: Session, user_id: int):

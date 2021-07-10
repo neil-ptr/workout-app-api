@@ -14,4 +14,4 @@ class Workout(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="workouts")
     workout_template_id = Column(Integer, ForeignKey("workout_templates.id"))
-    workout_templates = relationship("WorkoutTemplate", back_populates="workouts")
+    workout_template = relationship("WorkoutTemplate", back_populates="workouts")

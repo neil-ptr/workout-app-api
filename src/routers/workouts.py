@@ -21,6 +21,7 @@ async def get_workouts(ids: str):
 async def update_workout(id: str, workout: Workout):
     return 'get workout'
 
+
 @router.delete('/')
 async def delete_workout(id: str):
     return 'delete workout'

@@ -1,8 +1,13 @@
 from pydantic import BaseModel
 
-class WorkoutTemplate(BaseModel):
+class ExerciseTemplate(BaseModel):
     name: str
 
-class ExerciseTemplate(BaseModel):
+
+class CreateExerciseTemplate(ExerciseTemplate):
     workoutTemplateId: int
+
+
+class WorkoutTemplate(BaseModel):
     name: str
+    exerciseTemplates: list[ExerciseTemplate]

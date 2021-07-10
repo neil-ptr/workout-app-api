@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 
 
+class ExerciseTemplate(BaseModel):
+    name: str
+
+
 class WorkoutTemplate(BaseModel):
     name: str
-
-
-class ExerciseTemplate(BaseModel):
-    workoutTemplateId: int
-    name: str
+    exerciseTemplates: list[ExerciseTemplate]
