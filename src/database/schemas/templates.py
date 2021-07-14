@@ -10,6 +10,7 @@ class ExerciseTemplate(Base):
     __tablename__ = "exercise_templates"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128))
+    sets = Column(Integer)
 
     workout_template_id = Column(Integer, ForeignKey("workout_templates.id"))
     workout_template = relationship("WorkoutTemplate", back_populates="exercise_templates")
@@ -18,7 +19,7 @@ class ExerciseTemplate(Base):
 class WorkoutTemplate(Base):
     __tablename__ = "workout_templates"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String(128))
 
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="workout_templates")

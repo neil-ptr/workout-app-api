@@ -10,7 +10,7 @@ def create_workout_template(db: Session, workoutTemplate: WorkoutTemplate, user_
     exerciseTemplates = []
 
     for exerciseTemplate in workoutTemplate.exerciseTemplates:
-        exerciseTemplate.append(schemas.ExerciseTemplate(name=exerciseTemplate.name, workout_template_id=newWorkoutTemplate.id))
+        exerciseTemplates.append(schemas.ExerciseTemplate(name=exerciseTemplate.name, workout_template_id=newWorkoutTemplate.id, sets=exerciseTemplate.sets))
     db.bulk_save_objects(exerciseTemplates)
 
     db.commit()

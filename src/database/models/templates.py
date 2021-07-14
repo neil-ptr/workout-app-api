@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class ExerciseTemplate(BaseModel):
     name: str
+    sets: int
 
 
 class WorkoutTemplate(BaseModel):
