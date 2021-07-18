@@ -22,17 +22,17 @@ ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 
 @router.post("/token", response_model=token.Token)
-async def login_user(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
-    user = get_user_by_email(db, form_data.username)
-    if not user:
+async def login_user(user: Login, response: Response, db: Session = Depends(get_db)):
+    dbUser = get_user_by_email(db, user.email)
+    if not dbUser:
         return Response(status_code=status.HTTP_404_NOT_FOUND, content='User not found')
-    if not bcrypt.checkpw(form_data.password.encode('utf-8'), user.hashed_password.encode('utf-8')):
+    if not bcrypt.checkpw(user.password.encode('utf-8'), dbUser.hashed_password.encode('utf-8')):
         return Response(status_code=status.HTTP_400_BAD_REQUEST, content='Incorrect password')
     access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    response.set_cookie(key="token", value=f"bearer {access_token}")
 
 
 @router.post("/signup", response_model=token.Token)
@@ -48,4 +48,4 @@ async def signup_user(user: SignUp, db: Session = Depends(get_db)):
     access_token = create_access_token(
         data={"sub": db_user.email}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    response.set_cookie(key="token", value=f"bearer {access_token}")

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from src.database import get_db
 from src.middleware.auth import get_current_user
-from src.models.request.templates import WorkoutTemplate, ExerciseTemplate, CreateExerciseTemplate
+from src.models.request.templates import WorkoutTemplate, ExerciseTemplate, CreateExerciseTemplate, EditWorkoutTemplate, EditExerciseTemplate
 from src.database.crud import templates as crud
 
 router = APIRouter()
@@ -22,13 +22,13 @@ async def get_workouts_template(db: Session = Depends(get_db), user = Depends(ge
 
 
 @router.put('/workouts')
-async def update_workouts_template(workoutTemplate: WorkoutTemplate, user = Depends(get_current_user)):
+async def update_workouts_template(editWorkoutTemplate: EditWorkoutTemplate, user = Depends(get_current_user)):
     # TODO
     return 'edit workouts'
 
 
-@router.delete('/workouts')
-async def delete_workouts_template(workoutTemplate: WorkoutTemplate, user = Depends(get_current_user)):
+@router.delete('/workouts/{id}')
+async def delete_workouts_template(id: int, user = Depends(get_current_user)):
     # TODO
     return 'delete workout'
 
@@ -47,12 +47,12 @@ async def get_exercise_template(workoutTemplateId: int, db: Session = Depends(ge
 
 
 @router.put('/exercises')
-async def update_exercise_template(exerciseTemplate: ExerciseTemplate, user = Depends(get_current_user)):
+async def update_exercise_template(editExerciseTemplate: EditExerciseTemplate, user = Depends(get_current_user)):
     # TODO
     return 'get exercise'
 
 
-@router.delete('/exercises')
-async def delete_exercise_template(exerciseTemplate: ExerciseTemplate, user = Depends(get_current_user)):
+@router.delete('/exercises/{id}')
+async def delete_exercise_template(id: int, user = Depends(get_current_user)):
     # TODO
     return 'delete exercise'

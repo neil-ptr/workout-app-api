@@ -7,9 +7,9 @@ from ..database import Base
 class Workout(Base):
     __tablename__ = "workouts"
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(DateTime)
+    started = Column(DateTime)
+    ended = Column(DateTime)
     active = Column(Boolean, default=True)
-    # duration = Integer TODO
 
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="workouts")
