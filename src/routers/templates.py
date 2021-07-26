@@ -43,6 +43,7 @@ async def create_exercise_template(createExerciseTemplate: CreateExerciseTemplat
 @router.get('/exercises')
 async def get_exercise_template(workoutTemplateId: int, db: Session = Depends(get_db), user = Depends(get_current_user)):
     exerciseTemplates = crud.get_exercise_templates(db, workoutTemplateId)
+    print(exerciseTemplates)
     return exerciseTemplates
 
 

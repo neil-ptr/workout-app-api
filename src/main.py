@@ -9,7 +9,12 @@ from src.database import schemas, engine
 schemas.Base.metadata.create_all(bind=engine)
 
 # TODO: change this for production
-origins = ["*"]
+origins = [
+    "http://localhost",
+    "https://localhost",
+    "http://localhost:3000",
+    "https://localhost:3000"
+]
 
 app = FastAPI()
 

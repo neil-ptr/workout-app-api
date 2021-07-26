@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-
-class WorkoutBase(BaseModel):
+class Exercise(BaseModel):
     name: str
+    sets: int

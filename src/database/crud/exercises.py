@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from src.database.models import exercises
+from src.models.crud import exercises
 from src.database import schemas
 
 def create_exercise(db: session):

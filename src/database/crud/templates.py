@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from src.database.models.templates import WorkoutTemplate, ExerciseTemplate
+from src.models.crud.templates import WorkoutTemplate, ExerciseTemplate
 from src.database import schemas
 
 def create_workout_template(db: Session, workoutTemplate: WorkoutTemplate, user_id: int):
@@ -36,7 +36,7 @@ def create_exercise_template(db: Session, exerciseTemplate: ExerciseTemplate, wo
 
 def get_exercise_templates(db: Session, workout_template_id: int):
     queryConstraint = schemas.ExerciseTemplate.workout_template_id == workout_template_id
-    exerciseTemplates = db.query(schemas.ExerciseTemplate).filter(queryConstraint).all()
+    exerciseTemplates = db.query(schemas.ExerciseTemplate).all()
     return exerciseTemplates
 
 def update_exercise_template(db: Session):
