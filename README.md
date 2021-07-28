@@ -5,6 +5,7 @@ API for workout journal app. Built with FastAPI and SQLAlchemy
 # Technologies Used
 
 - FastAPI
+- PostgreSQL
 - SQLAlchemy
 - Alembic
 
