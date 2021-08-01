@@ -1,9 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Workout(BaseModel): 
     started: datetime
-    ended: datetime
+    ended: Optional[datetime]
     active = bool
-    workout_template_id = int

@@ -6,6 +6,7 @@ from fastapi.exceptions import HTTPException
 from fastapi import Request
 from starlette.status import HTTP_401_UNAUTHORIZED
 
+
 class CookieAuthScheme:
     async def __call__(self, request: Request) -> Optional[str]:
         token_cookie_val: str = request.cookies.get("token")

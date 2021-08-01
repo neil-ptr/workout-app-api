@@ -4,5 +4,5 @@ from .exercises import Exercise
 
 
 class Workout(BaseModel):
-    name: str
-    
+    workoutTemplateId: int
+    started: str

@@ -6,14 +6,17 @@ from src.models.crud import workouts
 from src.database import schemas
 
 def create_workout(db: Session, workout: workouts.Workout, user):
+    # TODO: turn all other workouts to unactive
     newWorkout = schemas.Workout(
         started=workout.started,
-        ended=workout.ended,
         active=True,
         user_id=user.id,
-        workout_template_id=workout.workout_template_id,
+        workout_template_id=workout.workoutTemplateId,
     )
-    return JSONResponse(content=jsonable_encoder(newWorkout))
+    db.add(newWorkout)
+    db.commit()
+    db.refresh(newWorkout)
+    return newWorkout
 
 def get_workouts(db: Session, workout_id_array: list[str]):
     pass

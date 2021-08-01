@@ -8,7 +8,7 @@ class Workout(Base):
     __tablename__ = "workouts"
     id = Column(Integer, primary_key=True, index=True)
     started = Column(DateTime)
-    ended = Column(DateTime)
+    ended = Column(DateTime, nullable=True)
     active = Column(Boolean, default=True)
 
     user_id = Column(Integer, ForeignKey("users.id"))

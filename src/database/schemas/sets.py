@@ -1,5 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Float
+from sqlalchemy.orm import relationship
 from ..database import Base
+
 
 class Set(Base):
     __tablename__ = "sets"
@@ -7,4 +9,5 @@ class Set(Base):
     weight = Column(Float)
     reps = Column(Integer)
 
-    exercise_id = Column(Integer, ForeignKey("exercise.id"))
+    exercise_id = Column('exercise_id', Integer, ForeignKey("exercises.id"))
+    exercise = relationship("Exercise", back_populates="sets")

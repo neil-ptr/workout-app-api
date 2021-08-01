@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, Request, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 
+from src.middleware import catch_exceptions_middleware
 from src.routers import users, workouts, exercises, sets, templates
 from src.database import schemas, engine
 
@@ -17,6 +18,8 @@ origins = [
 ]
 
 app = FastAPI()
+
+app.middleware('http')(catch_exceptions_middleware)
 
 app.add_middleware(
     CORSMiddleware,
