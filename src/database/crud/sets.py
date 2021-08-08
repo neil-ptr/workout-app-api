@@ -17,8 +17,11 @@ def get_set(db: Session):
     pass
 
 
-def update_set(db: Session):
-    pass
+def update_set(db: Session, setId, updateSet):
+    updated = db.query(schemas.Set).filter(
+        schemas.Set.id == setId).update(updateSet.dict())
+    db.commit()
+    return updated
 
 
 def delete_set(db: Session):

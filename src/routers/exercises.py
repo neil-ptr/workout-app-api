@@ -10,13 +10,12 @@ router = APIRouter()
 
 
 @router.get('/')
-async def get_exercises(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    # crud.get_exercises(db,)
-    pass
+async def get_exercises(workoutId: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    return 'hisoemthing'
 
 
 @router.post('/')
-async def create_exercises(db: Session = Depends(get_db), user=Depends(get_current_user)):
+async def create_exercise(db: Session = Depends(get_db), user=Depends(get_current_user)):
     return 'post exercises'
 
 

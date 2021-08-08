@@ -13,6 +13,7 @@ class Exercise(Base):
     # ended = Column(DateTime, nullable=True)
     active = Column(Boolean, default=True)  # TODO: remove
 
+    workout_id = Column(Integer, ForeignKey("workouts.id"))
     exercise_template_id = Column(Integer, ForeignKey("exercise_templates.id"))
     exercise_template = relationship(
         "ExerciseTemplate", back_populates="exercises")

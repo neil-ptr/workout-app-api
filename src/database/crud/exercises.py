@@ -13,20 +13,18 @@ def create_exercise(db: Session, exerciseTemplateId):
     return newExercise
 
 
-def create_multiple_exercises(db: Session, exerciseTemplateIds):
+def create_multiple_exercises(db: Session, exerciseTemplateIds, workoutId):
     newExercises = []
     for exerciseTemplateId in exerciseTemplateIds:
         newExercises.append(schemas.Exercise(
-            exercise_template_id=exerciseTemplateId))
+            exercise_template_id=exerciseTemplateId, workout_id=workoutId))
     db.bulk_save_objects(newExercises)
     db.commit()
     return newExercises
 
 
-def get_exercises(db: Session, workout_id_array: list[str]):
-    workoutTemplates = db.query(schemas.Exercise).filter(
-        schemas.Exercise.id.in_(tuple(workout_id_array))).all()
-    return workoutTemplates
+def get_exercises(db: Session, workout_id: int):
+    return db.query(schemas.Exercise).filter(schemas.Exercise.workout_id == workout_id).all()
 
 
 def update_exercise(db: Session):
