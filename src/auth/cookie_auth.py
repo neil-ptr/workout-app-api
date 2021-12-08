@@ -10,6 +10,7 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 class CookieAuthScheme:
     async def __call__(self, request: Request) -> Optional[str]:
         token_cookie_val: str = request.cookies.get("token")
+        print(request.cookies)
         if not token_cookie_val:
             raise HTTPException(
                 status_code=HTTP_401_UNAUTHORIZED,

@@ -25,8 +25,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 @router.post("/token", response_model=token.Token)
 async def login_user(user: Login, response: Response, db: Session = Depends(get_db)):
-    print('jdkflsdj')
     try:
+        print(user)
         dbUser = get_user_by_email(db, user.email)
         if not dbUser:
             return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content=jsonable_encoder({'error': 'User not found'}))
@@ -37,8 +37,7 @@ async def login_user(user: Login, response: Response, db: Session = Depends(get_
         access_token = create_access_token(
             data={"sub": user.email}, expires_delta=access_token_expires
         )
-        response.set_cookie(
-            key="token", value=f"bearer {access_token}", samesite="strict", httponly=True)
+        return JSONResponse(content=jsonable_encoder({'access_token': access_token, "token_type": "bearer"}))
     except Exception as e:
         raise(e)
 

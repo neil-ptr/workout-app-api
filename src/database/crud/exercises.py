@@ -24,7 +24,10 @@ def create_multiple_exercises(db: Session, exerciseTemplateIds, workoutId):
 
 
 def get_exercises(db: Session, workout_id: int):
-    return db.query(schemas.Exercise).filter(schemas.Exercise.workout_id == workout_id).all()
+    return db.query(schemas.Exercise, schemas.ExerciseTemplate) \
+        .filter(schemas.ExerciseTemplate.id == schemas.Exercise.exercise_template_id) \
+        .filter(schemas.Exercise.workout_id == workout_id) \
+        .all()
 
 
 def update_exercise(db: Session):
