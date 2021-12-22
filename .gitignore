@@ -50,3 +50,6 @@ coverage.xml
 /docs/build/_build/
 /pysqlite_test_schema.db
 *.sqlite3
+
+src/config/__init__.py
+src/config/config.py

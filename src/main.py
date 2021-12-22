@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 
 from src.middleware import catch_exceptions_middleware
-from src.routers import users, workouts, exercises, sets, templates
+from src.routers import users, workouts, exercises, sets, templates, auth
 from src.database import schemas, engine
 
 # init database
@@ -30,6 +30,7 @@ app.add_middleware(
 )
 
 # other routes
+app.include_router(router=auth.router, prefix='/api/auth')
 app.include_router(router=users.router, prefix='/api/users')
 app.include_router(router=templates.router, prefix='/api/templates')
 app.include_router(router=workouts.router, prefix='/api/workouts')

@@ -11,3 +11,6 @@ class SignUp(BaseModel):
     firstname: str
     password: str
     confirmPassword: str
+
+class RefreshToken(BaseModel):
+    refreshToken: str

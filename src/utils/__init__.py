@@ -1,1 +1,1 @@
-from .jwt import create_access_token as create_access_token
+from .jwt import sign_token
