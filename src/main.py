@@ -1,6 +1,5 @@
-from fastapi import FastAPI, Depends, Request, Cookie
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional
 
 from src.middleware import catch_exceptions_middleware
 from src.routers import users, workouts, exercises, sets, templates, auth

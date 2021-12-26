@@ -10,6 +10,7 @@ class ExerciseTemplate(Base):
     __tablename__ = "exercise_templates"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128))
+    reps = Column(Integer)
     sets = Column(Integer)
 
     workout_template_id = Column(Integer, ForeignKey("workout_templates.id"))
