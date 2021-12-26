@@ -9,4 +9,6 @@ router = APIRouter()
 
 @router.get("/users/{user_id}")
 async def get_user(db: Session = Depends(get_db)):
+    """ get user info
+    """
     pass

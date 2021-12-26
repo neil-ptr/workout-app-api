@@ -40,7 +40,7 @@ async def signup(user: SignUp, db: Session = Depends(get_db)):
     }))
 
 
-@router.post('/tokens')
+@router.post('/token')
 async def tokens(user: Login, db: Session = Depends(get_db)):
     """ get new access and refresh tokens after authenticating credentials
     """
