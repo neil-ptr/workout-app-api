@@ -25,4 +25,4 @@ class WorkoutTemplate(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="workout_templates")
     workouts = relationship("Workout", back_populates="workout_template")
-    exercise_templates = relationship("ExerciseTemplate", back_populates="workout_template")
+    exercise_templates = relationship("ExerciseTemplate", back_populates="workout_template", cascade="all, delete-orphan")

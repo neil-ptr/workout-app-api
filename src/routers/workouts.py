@@ -52,18 +52,3 @@ async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_cur
         "activeWorkout": active_workout,
         "exercises": exercises
     }))
-
-
-@ router.get('/{workoutId}')
-async def get_workouts(workoutId: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    pass
-
-
-@ router.put('/')
-async def update_workout(id: str, workout: Workout, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'get workout'
-
-
-@ router.delete('/')
-async def delete_workout(id: str, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'delete workout'

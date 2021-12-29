@@ -34,6 +34,7 @@ async def signup(user: SignUp, db: Session = Depends(get_db)):
     refresh_token = sign_token(
         {"sub": new_db_user.email}, config.REFRESH_TOKEN_SECRET, config.REFRESH_ALGORITHM, expires_delta=refresh_token_expires
     )
+
     return JSONResponse(content=jsonable_encoder({
         "access_token": access_token,
         "refresh_token": refresh_token

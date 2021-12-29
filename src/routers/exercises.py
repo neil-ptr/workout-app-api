@@ -7,23 +7,3 @@ from src.models.request import exercises
 from src.database import crud
 
 router = APIRouter()
-
-
-@router.get('/')
-async def get_exercises(workoutId: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'hisoemthing'
-
-
-@router.post('/')
-async def create_exercise(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'post exercises'
-
-
-@router.put('/')
-async def update_exercise(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'get exercise'
-
-
-@router.delete('/')
-async def delete_exercise(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'delete exercise'
