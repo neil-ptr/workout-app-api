@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy import inspect
 from sqlalchemy.orm import Session
-from datetime import datetime
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 
+from src.database.utils import object_as_dict
 from src.models.request.workouts import Workout
-from src.models.crud.workouts import UpdateWorkout
 from src.middleware.auth import get_current_user
 from src.database import get_db
 from src.database import crud
@@ -15,39 +15,49 @@ router = APIRouter()
 
 @router.post('/')
 async def create_workout(workout: Workout, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    try:
-        crud.update_workout(
-            db, user, {"active": False, "ended": datetime.now()})
+    """ turn all other workouts to inactive and start new workout
+    """
+    # ensure that the new workout is the only active workout
+    crud.update_workout(db, user, {'active': False})
+    new_workout = crud.create_workout(db, workout, user)
+    exercise_templates = crud.get_exercise_templates(
+        db, workout.workoutTemplateId)
 
-        new_workout = crud.create_workout(db, workout, user)
-        exercise_templates = crud.get_exercise_templates(
-            db, workout.workoutTemplateId)
+    exercise_template_ids = [
+        exerciseTemplate.id for exerciseTemplate in exercise_templates]
+    crud.create_multiple_exercises(
+        db, exercise_template_ids,  new_workout.id)
 
-        exercise_template_ids = [
-            exerciseTemplate.id for exerciseTemplate in exercise_templates]
-        newExercises = crud.create_multiple_exercises(
-            db, exercise_template_ids,  new_workout.id)
+    exercises = crud.get_exercises(db, new_workout.id)
 
-        return JSONResponse(content=jsonable_encoder(new_workout))
-    except Exception as e:
-        raise(e)
+    # build workout object to return
+    workout_obj = {
+        'id': new_workout.id, 
+        'active': new_workout.active,
+        'workout_template_id': new_workout.workout_template_id, 
+        'ended': new_workout.ended, 
+        'started': new_workout.started, 
+        'user_id': new_workout.user_id,
+        'exercises': exercises
+    }
 
-
-@router.get('/')
-async def get_workouts(ids: str, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    id_array = ids.split(',')
-    for id in id_array:
-        print(id)
-    return 'get workouts'
+    return JSONResponse(content=jsonable_encoder(workout_obj))
 
 
 @router.get('/active')
 async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
     active_workout = crud.get_active_workout(db, user)
-    # TODO: seperate this into its own endpoint
-    exercises = crud.get_exercises(db, active_workout.id)
-    # print(active_workout.dict())
-    # active_workout["exercises"] = active_workout
+    exercise_data = crud.get_exercises(db, active_workout.id)
+
+    exercises = []
+
+    for exercise in exercise_data:
+        exercises.append({
+            'exercise': object_as_dict(exercise.Exercise),
+            'exerciseTemplate': object_as_dict(exercise.ExerciseTemplate),
+            'sets': [object_as_dict(set) for set in crud.get_sets(db, exercise.Exercise.id)]
+        })
+
     return JSONResponse(content=jsonable_encoder({
         "activeWorkout": active_workout,
         "exercises": exercises

@@ -5,6 +5,15 @@ from src.database import schemas
 
 
 def create_set(db: Session, set: Sets):
+    """ create a new set in db
+
+    Args:
+        db (Session): database connection
+        set (Sets): set data to create new set with
+
+    Returns:
+        Set: newly created set
+    """
     newSet = schemas.Set(reps=set.reps, weight=set.weight,
                          exercise_id=set.exerciseId)
     db.add(newSet)
@@ -13,11 +22,32 @@ def create_set(db: Session, set: Sets):
     return newSet
 
 
-def get_set(db: Session):
-    pass
+def get_sets(db: Session, exercise_id: int):
+    """ get sets of an exercise
+
+    Args:
+        db (Session): database connection
+        exercise_id (int): id of the exercise to get sets of 
+
+    Returns:
+        List[Set]: List of sets for exercise
+    """
+    return db.query(schemas.Set) \
+        .filter(schemas.Set.exercise_id == exercise_id) \
+        .all()
 
 
-def update_set(db: Session, setId, updateSet):
+def update_set(db: Session, set_id: int, update_set):
+    """ update set with update set data
+
+    Args:
+        db (Session): database connection
+        set_id (int): id of set to update
+        update_set (UpdateSet): data to update set with
+
+    Returns:
+        [type]: [description]
+    """
     updated = db.query(schemas.Set).filter(
         schemas.Set.id == setId).update(updateSet.dict())
     db.commit()

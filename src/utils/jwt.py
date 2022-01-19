@@ -5,7 +5,8 @@ from jose import jwt
 
 
 def sign_token(data: dict, secret_key, algorithm, expires_delta: Optional[timedelta] = None):
-    """ 
+    """ sign JWT with given data payload
+
     Args:
         data: dictionary of data
         secret_key: string of secret key
@@ -13,7 +14,7 @@ def sign_token(data: dict, secret_key, algorithm, expires_delta: Optional[timede
         expires_delta: unix timestamp of when JWT expires
 
     Returns:
-        encoded jwt
+        string: encoded jwt
 
     """
     to_encode = data.copy()

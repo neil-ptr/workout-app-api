@@ -8,10 +8,6 @@ from ..database import Base
 class Exercise(Base):
     __tablename__ = "exercises"
     id = Column(Integer, primary_key=True, index=True)
-    duration = Column(Integer)  # TODO: remove
-    # started = Column(DateTime)
-    # ended = Column(DateTime, nullable=True)
-    active = Column(Boolean, default=True)  # TODO: remove
 
     workout_id = Column(Integer, ForeignKey("workouts.id"))
     exercise_template_id = Column(Integer, ForeignKey("exercise_templates.id"))

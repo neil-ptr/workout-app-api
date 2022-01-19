@@ -12,14 +12,15 @@ router = APIRouter()
 
 
 @router.get('/')
-async def get_sets(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return 'get sets'
+async def get_sets(exerciseId: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    sets = crud.get_sets(db, exerciseId)
+    return sets
 
 
 @router.post('/')
 async def post_sets(createSet: CreateSet, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    newSet = crud.create_set(db, createSet)
-    return JSONResponse(content=jsonable_encoder(newSet))
+    new_set = crud.create_set(db, createSet)
+    return JSONResponse(content=jsonable_encoder(new_set))
 
 
 @router.put('/')
