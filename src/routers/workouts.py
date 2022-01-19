@@ -60,5 +60,5 @@ async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_cur
 
     return JSONResponse(content=jsonable_encoder({
         "activeWorkout": active_workout,
-        "exercises": exercises
+        "workoutData": exercises
     }))
