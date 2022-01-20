@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post('/')
 async def create_workout(workout: Workout, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    """ turn all other workouts to inactive and start new workout
+    """ create new workout and mark it as active
     """
     # ensure that the new workout is the only active workout
     crud.update_workout(db, user, {'active': False})
@@ -46,6 +46,8 @@ async def create_workout(workout: Workout, db: Session = Depends(get_db), user=D
 
 @router.get('/active')
 async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    """ get the current active workout
+    """
     try:
         active_workout = crud.get_active_workout(db, user)
         exercise_data = crud.get_exercises(db, active_workout.id)
@@ -72,4 +74,6 @@ async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_cur
 
 @router.get('/endActiveWorkout')
 async def end_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    """ End the currently active workout
+    """
     crud.update_workout(db, user, {'active': False})
