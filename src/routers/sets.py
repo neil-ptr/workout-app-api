@@ -18,14 +18,14 @@ async def get_sets(exerciseId: int, db: Session = Depends(get_db), user=Depends(
 
 
 @router.post('/')
-async def post_sets(createSet: CreateSet, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    new_set = crud.create_set(db, createSet)
+async def post_sets(create_set: CreateSet, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    new_set = crud.create_set(db, create_set)
     return JSONResponse(content=jsonable_encoder(new_set))
 
 
-@router.put('/')
-async def update_set(setId: int, updateSet: UpdateSet, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    updated = crud.update_set(db, setId, updateSet)
+@router.put('/{set_id}')
+async def update_set(set_id: int, update_set: UpdateSet, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    updated = crud.update_set(db, set_id, update_set)
     if updated:
         return 'success'
     else:

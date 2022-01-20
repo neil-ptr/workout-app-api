@@ -14,8 +14,7 @@ def create_set(db: Session, set: Sets):
     Returns:
         Set: newly created set
     """
-    newSet = schemas.Set(reps=set.reps, weight=set.weight,
-                         exercise_id=set.exerciseId)
+    newSet = schemas.Set(reps=set.reps, weight=set.weight,exercise_id=set.exerciseId)
     db.add(newSet)
     db.commit()
     db.refresh(newSet)
@@ -49,7 +48,7 @@ def update_set(db: Session, set_id: int, update_set):
         [type]: [description]
     """
     updated = db.query(schemas.Set).filter(
-        schemas.Set.id == setId).update(updateSet.dict())
+        schemas.Set.id == set_id).update(update_set.dict())
     db.commit()
     return updated
 
