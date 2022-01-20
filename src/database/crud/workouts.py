@@ -1,10 +1,8 @@
 import datetime as dt
 
 from sqlalchemy.orm import Session
-from sqlalchemy import update, and_
 from sqlalchemy.orm.session import make_transient
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
+from sqlalchemy.orm.exc import NoResultFound
 
 from src.models.crud import workouts
 from src.database import schemas
@@ -29,6 +27,8 @@ def get_active_workout(db: Session, user):
         .filter(user.id == schemas.WorkoutTemplate.user_id) \
         .filter(schemas.WorkoutTemplate.id == schemas.Workout.workout_template_id) \
         .filter(schemas.Workout.active == True).first()
+    if active_workout is None:
+        raise NoResultFound
     return active_workout.Workout
 
 

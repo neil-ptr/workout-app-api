@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy import inspect
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -46,19 +46,30 @@ async def create_workout(workout: Workout, db: Session = Depends(get_db), user=D
 
 @router.get('/active')
 async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    active_workout = crud.get_active_workout(db, user)
-    exercise_data = crud.get_exercises(db, active_workout.id)
+    try:
+        active_workout = crud.get_active_workout(db, user)
+        exercise_data = crud.get_exercises(db, active_workout.id)
 
-    exercises = []
+        exercises = []
 
-    for exercise in exercise_data:
-        exercises.append({
-            'exercise': object_as_dict(exercise.Exercise),
-            'exerciseTemplate': object_as_dict(exercise.ExerciseTemplate),
-            'sets': [object_as_dict(set) for set in crud.get_sets(db, exercise.Exercise.id)]
-        })
+        for exercise in exercise_data:
+            exercises.append({
+                'exercise': object_as_dict(exercise.Exercise),
+                'exerciseTemplate': object_as_dict(exercise.ExerciseTemplate),
+                'sets': [object_as_dict(set) for set in crud.get_sets(db, exercise.Exercise.id)]
+            })
 
-    return JSONResponse(content=jsonable_encoder({
-        "activeWorkout": active_workout,
-        "workoutData": exercises
-    }))
+        return JSONResponse(content=jsonable_encoder({
+            "activeWorkout": active_workout,
+            "workoutData": exercises
+        }))
+
+    except NoResultFound:
+        return JSONResponse(content=jsonable_encoder({
+            "activeWorkout": None,
+            "workoutData": []
+        }))
+
+@router.get('/endActiveWorkout')
+async def end_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    crud.update_workout(db, user, {'active': False})
