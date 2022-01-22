@@ -44,6 +44,11 @@ async def create_workout(workout: Workout, db: Session = Depends(get_db), user=D
     return JSONResponse(content=jsonable_encoder(workout_obj))
 
 
+@router.get('/')
+async def get_workouts(before: str = None, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    workouts = crud.get_workouts(db, user)
+    return JSONResponse(content=jsonable_encoder(workouts))
+
 @router.get('/active')
 async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
     """ get the current active workout
@@ -72,7 +77,7 @@ async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_cur
             "workoutData": []
         }))
 
-@router.get('/endActiveWorkout')
+@router.post('/endActiveWorkout')
 async def end_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
     """ End the currently active workout
     """

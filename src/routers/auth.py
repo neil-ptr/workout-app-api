@@ -4,6 +4,8 @@ import bcrypt
 from fastapi import Depends, APIRouter, status
 from fastapi.exceptions import HTTPException
 from jose.exceptions import JWTError
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from src.models.request.users import Login, SignUp, RefreshToken
 from src.database.crud import *
 from src.database import get_db

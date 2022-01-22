@@ -21,6 +21,19 @@ def create_workout(db: Session, workout: workouts.Workout, user):
     make_transient(new_workout)
     return new_workout
 
+def get_workouts(db: Session, user):
+    """ get workouts of the user
+
+    Args:
+        db (Session): [description]
+        user ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    workouts = db.query(schemas.Workout).filter(schemas.Workout.user_id == user.id).all()
+    return workouts
+
 
 def get_active_workout(db: Session, user):
     active_workout = db.query(schemas.WorkoutTemplate, schemas.Workout) \
