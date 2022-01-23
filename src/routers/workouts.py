@@ -50,25 +50,6 @@ async def get_workouts(before: str = None, after: str = None, db: Session = Depe
     sorted_workouts = sorted(workouts, key=lambda workout: workout.started)
     return JSONResponse(content=jsonable_encoder(sorted_workouts))
 
-@router.get('/{workout_id}')
-async def get_workout(workout_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    workout = crud.get_workout(db, user, workout_id)
-    exercise_data = crud.get_exercises(db, workout.id)
-
-    exercises = []
-
-    for exercise in exercise_data:
-        exercises.append({
-            'exercise': object_as_dict(exercise.Exercise),
-            'exerciseTemplate': object_as_dict(exercise.ExerciseTemplate),
-            'sets': [object_as_dict(set) for set in crud.get_sets(db, exercise.Exercise.id)]
-        })
-
-    return JSONResponse(content=jsonable_encoder({
-        "workout": workout,
-        "workoutData": exercises
-    }))
-
 
 @router.get('/active')
 async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
@@ -98,8 +79,28 @@ async def get_active_workout(db: Session = Depends(get_db), user=Depends(get_cur
             "workoutData": []
         }))
 
+
 @router.get('/endActiveWorkout')
 async def end_active_workout(db: Session = Depends(get_db), user=Depends(get_current_user)):
     """ End the currently active workout
     """
     crud.update_workout(db, user, {'active': False})
+
+@router.get('/{workout_id}')
+async def get_workout(workout_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    workout = crud.get_workout(db, user, workout_id)
+    exercise_data = crud.get_exercises(db, workout.id)
+
+    exercises = []
+
+    for exercise in exercise_data:
+        exercises.append({
+            'exercise': object_as_dict(exercise.Exercise),
+            'exerciseTemplate': object_as_dict(exercise.ExerciseTemplate),
+            'sets': [object_as_dict(set) for set in crud.get_sets(db, exercise.Exercise.id)]
+        })
+
+    return JSONResponse(content=jsonable_encoder({
+        "workout": workout,
+        "workoutData": exercises
+    }))
