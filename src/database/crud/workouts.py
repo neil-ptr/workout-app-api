@@ -1,6 +1,6 @@
 import datetime as dt
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, load_only
 from sqlalchemy.orm.session import make_transient
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -20,6 +20,14 @@ def create_workout(db: Session, workout: workouts.Workout, user):
     db.refresh(new_workout)
     make_transient(new_workout)
     return new_workout
+
+def get_workout(db: Session, user, workout_id):
+    workout = db.query(schemas.WorkoutTemplate, schemas.Workout) \
+        .filter(user.id == schemas.WorkoutTemplate.user_id) \
+        .filter(schemas.WorkoutTemplate.id == schemas.Workout.workout_template_id) \
+        .first()
+    return workout.Workout
+
 
 def get_workouts(db: Session, user):
     """ get workouts of the user
