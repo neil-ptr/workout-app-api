@@ -3,7 +3,7 @@ import bcrypt
 
 from fastapi import Depends, APIRouter, status
 from fastapi.exceptions import HTTPException
-from jose.exceptions import JWTError
+from jose.exceptions import JWTError, ExpiredSignatureError
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from src.models.request.users import Login, SignUp, RefreshToken
@@ -87,5 +87,10 @@ async def refresh_token(refreshToken: RefreshToken, db: Session = Depends(get_db
             "access_token": access_token,
             "refresh_token": refresh_token
         }))
-    except JWTError:
-        return HTTPException()
+    except (JWTError, ExpiredSignatureError):
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
