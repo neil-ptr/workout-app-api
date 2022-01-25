@@ -45,10 +45,9 @@ async def create_workout(workout: Workout, db: Session = Depends(get_db), user=D
 
 
 @router.get('/')
-async def get_workouts(before: str = None, after: str = None, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    workouts = crud.get_workouts(db, user)
-    sorted_workouts = sorted(workouts, key=lambda workout: workout.started)
-    return JSONResponse(content=jsonable_encoder(sorted_workouts))
+async def get_workouts(before: str = None, after: str = None, count: int = None, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    workouts = crud.get_workouts(db, user, before=before, count=count, after=after)
+    return JSONResponse(content=jsonable_encoder(workouts))
 
 
 @router.get('/active')

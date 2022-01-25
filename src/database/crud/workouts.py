@@ -29,7 +29,7 @@ def get_workout(db: Session, user, workout_id):
     return workout.Workout
 
 
-def get_workouts(db: Session, user):
+def get_workouts(db: Session, user, **kwargs):
     """ get workouts of the user
 
     Args:
@@ -39,8 +39,17 @@ def get_workouts(db: Session, user):
     Returns:
         [type]: [description]
     """
-    workouts = db.query(schemas.Workout).filter(schemas.Workout.user_id == user.id).all()
-    return workouts
+    workouts = db.query(schemas.Workout).filter(schemas.Workout.user_id == user.id)
+    before = kwargs.get('before', None)
+    if before:
+        workouts = workouts.filter(schemas.Workout.started < before)
+
+    workouts = workouts.order_by(schemas.Workout.started.desc())
+    
+    count = kwargs.get('count', None)
+    if count:
+        workouts = workouts.limit(count)
+    return workouts.all()
 
 
 def get_active_workout(db: Session, user):
