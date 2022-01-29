@@ -12,9 +12,11 @@ router = APIRouter()
 
 
 @router.get('/')
-async def get_sets(exerciseId: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    sets = crud.get_sets(db, exerciseId)
-    return sets
+async def get_sets(exerciseId: int = None, workoutId: int = None, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    if workoutId:
+        return crud.get_sets_by_workout_id(db, workoutId)
+    else:
+        return crud.get_sets(db, exerciseId)
 
 
 @router.post('/')
@@ -29,6 +31,7 @@ async def update_set(set_id: int, update_set: UpdateSet, db: Session = Depends(g
     if updated:
         return 'success'
     else:
+        # TODO: return better error
         return 'error'
 
 

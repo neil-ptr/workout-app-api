@@ -13,10 +13,15 @@ async def create_exercise(exerciseTemplateId: int, workoutId: int, db: Session =
     db_exercise = crud.create_exercise(db, user, exerciseTemplateId, workoutId)
 
 @router.get("/{exercise_id}")
-async def get_exercise(exercise_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
+async def get_exercise(exercise_id: int, sets: bool = True, db: Session = Depends(get_db), user=Depends(get_current_user)):
     db_sets = crud.get_sets(db, exercise_id)
     db_exercise = crud.get_exercise(db, exercise_id, user.id)
     return {
         "sets": db_sets,
         "exercise": db_exercise
     }
+
+@router.get("/{exercise_id}/sets")
+async def get_exercise_sets(exercise_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)):
+    exercise = crud.get_exercise(db, exercise_id, user.id)
+    return exercise

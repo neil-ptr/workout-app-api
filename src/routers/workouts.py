@@ -3,6 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+from api.src.database.crud import exercises
 
 from src.database.utils import object_as_dict
 from src.models.request.workouts import Workout
@@ -103,3 +104,8 @@ async def get_workout(workout_id: int, db: Session = Depends(get_db), user=Depen
         "workout": workout,
         "workoutData": exercises
     }))
+
+@router.get('/{workout_id}/exercises')
+async def get_workout_exercises(workout_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
+    exercises = crud.get_exercises(db, workout_id)
+    return exercises

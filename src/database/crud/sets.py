@@ -21,6 +21,10 @@ def create_set(db: Session, set: Sets):
     return newSet
 
 
+def get_sets_by_exercise(db: Session, exercise_id: int):
+    pass
+
+
 def get_sets(db: Session, exercise_id: int):
     """ get sets of an exercise
 
