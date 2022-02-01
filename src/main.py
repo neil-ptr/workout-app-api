@@ -4,7 +4,7 @@ import strawberry
 from strawberry.asgi import GraphQL
 
 from src.middleware import catch_exceptions_middleware
-from src.routers import users, workouts, exercises, sets, templates, auth
+from src.routers import auth
 from src.database import schemas, engine
 from src.graphql.schemas import Query
 
@@ -40,8 +40,3 @@ app.add_websocket_route("/graphql", graphql_app)
 
 # other routes
 app.include_router(router=auth.router, prefix='/api/auth')
-app.include_router(router=users.router, prefix='/api/users')
-app.include_router(router=templates.router, prefix='/api/templates')
-app.include_router(router=workouts.router, prefix='/api/workouts')
-app.include_router(router=exercises.router, prefix='/api/exercises')
-app.include_router(router=sets.router, prefix='/api/sets')
