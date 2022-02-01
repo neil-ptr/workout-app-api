@@ -5,13 +5,14 @@ from src.models.crud import users
 from src.database import schemas
 
 
-def create_user(db: Session, user: users.UserCreate):
-    newUser = schemas.User(
-        email=user.email, hashed_password=user.hash, firstname=user.firstname)
-    db.add(newUser)
-    db.commit()
-    db.refresh(newUser)
-    return newUser
+def create_user(user: users.UserCreate):
+    with Session(engine) as db:
+        newUser = schemas.User(
+            email=user.email, hashed_password=user.hash, firstname=user.firstname)
+        db.add(newUser)
+        db.commit()
+        db.refresh(newUser)
+        return newUser
 
 
 def get_user(user_id: int):

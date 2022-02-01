@@ -23,7 +23,7 @@ class Workout:
     ended: str
     active: bool
     exercises: List['Exercise'] = strawberry.field(resolver=get_exercises)
-    workoutTemplate: WorkoutTemplate = strawberry.field(resolver=get_workout_template)
+    workoutTemplate: 'WorkoutTemplate' = strawberry.field(resolver=get_workout_template)
 
 @strawberry.type
 class Exercise:
@@ -51,12 +51,11 @@ class Tokens:
     accessToken: str
 
 @strawberry.type
-class LoginSuccess:
+class AuthSuccess:
     tokens: Tokens
 
 @strawberry.type
-class LoginError:
+class AuthError:
     message: str
 
-LoginResult = strawberry.union("LoginResult", (LoginSuccess, LoginError))
-
+AuthResult = strawberry.union("AuthResult", (AuthSuccess, AuthError))
