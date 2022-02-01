@@ -4,7 +4,6 @@ import strawberry
 from strawberry.asgi import GraphQL
 
 from src.middleware import catch_exceptions_middleware
-from src.routers import auth
 from src.database import schemas, engine
 from src.graphql import Query, Mutation
 
@@ -37,6 +36,3 @@ graphql_app = GraphQL(schema)
 
 app.add_route("/graphql", graphql_app)
 app.add_websocket_route("/graphql", graphql_app)
-
-# other routes
-app.include_router(router=auth.router, prefix='/api/auth')

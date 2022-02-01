@@ -1,5 +1,6 @@
-from src.models.base.sets import SetsBase
+from pydantic import BaseModel
 
 
-class Sets(SetsBase):
-    pass
+class Sets(BaseModel):
+    reps: int
+    weight: float
