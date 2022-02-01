@@ -23,7 +23,7 @@ def create_multiple_exercises(db: Session, exercise_template_ids, workoutId):
     db.commit()
     return new_exercises
 
-def get_exercise(workout_id: int): 
+def get_exercises(workout_id: int): 
     """ get single exercise by id
 
     Args:
@@ -39,17 +39,19 @@ def get_exercise(workout_id: int):
             .filter(schemas.Exercise.workout_id == workout_id) \
             .all()
 
-def get_exercises(db: Session, workout_id: int):
-    """ get the exercises of a workout
+def get_exercise(exercise_id: int): 
+    """ get single exercise by id
 
     Args:
         db (Session): db connection
-        workout_id (int): id of the workout to get exercises for
+        exercise_id (int): id of the exercise to et
+        user_id (int): id of the user
 
     Returns:
-        List of exercise and exercise templates   
+        [type]: [description]
     """
-    return db.query(schemas.Exercise, schemas.ExerciseTemplate) \
-        .filter(schemas.Exercise.workout_id == workout_id) \
-        .filter(schemas.ExerciseTemplate.id == schemas.Exercise.exercise_template_id) \
-        .all()
+    with Session(engine) as db:
+        return db.query(schemas.Exercise) \
+            .filter(schemas.Exercise.id == exercise_id) \
+            .first()
+

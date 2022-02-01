@@ -64,5 +64,6 @@ class Query:
         return workout_template
 
     @strawberry.field
-    def exercise(self) -> List[Exercise]:
-        pass
+    def exercises(self, workout_id: int) -> List[Exercise]:
+        exercises = crud.get_exercises(workout_id)
+        return exercises
