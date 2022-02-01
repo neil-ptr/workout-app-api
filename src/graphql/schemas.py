@@ -1,0 +1,68 @@
+import strawberry
+from typing import List, Optional
+
+from src.database import crud
+from src.database.crud import exercises, workouts
+from src.graphql.resolvers import get_exercise_templates, get_exercises, get_sets, get_exercise_template, get_workout_template
+
+@strawberry.type
+class ExerciseTemplate:
+    id: int
+    name: str
+    reps: int
+    sets: int
+
+@strawberry.type
+class WorkoutTemplate:
+    id: int
+    name: str
+    exerciseTemplates: List['ExerciseTemplate'] = strawberry.field(resolver=get_exercise_templates)
+
+@strawberry.type
+class Workout:
+    id: int
+    started: str
+    ended: str
+    active: bool
+    exercises: List['Exercise'] = strawberry.field(resolver=get_exercises)
+    workoutTemplate: WorkoutTemplate = strawberry.field(resolver=get_workout_template)
+
+@strawberry.type
+class Exercise:
+    id: int
+    exerciseTemplate: ExerciseTemplate = strawberry.field(resolver=get_exercise_template)
+    sets: List['Set'] = strawberry.field(resolver=get_sets)
+
+@strawberry.type
+class Set:
+    id: int
+    weight: float
+    reps: int
+
+@strawberry.type
+class User:
+    id: int
+    email: str
+    firstname: str
+    workouts: List[Workout]
+    workoutTemplates: List[WorkoutTemplate]
+
+@strawberry.type
+class Query:
+    @strawberry.field
+    def user(self, id: strawberry.ID) -> User:
+        return crud.get_user(id)
+
+    @strawberry.field
+    def workout(self, active: Optional[bool] = False, before: Optional[str] = None, after: Optional[str] = None) -> List[Workout]:
+        workouts = crud.get_workouts(6, active=active, before=before, after=after)
+        return workouts
+
+    @strawberry.field
+    def workoutTemplate(self, user_id: int) -> List[WorkoutTemplate]:
+        workout_template = crud.get_workout_templates(user_id)
+        return workout_template
+
+    @strawberry.field
+    def exercise(self) -> List[Exercise]:
+        pass

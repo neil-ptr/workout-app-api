@@ -3,7 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from api.src.database.crud import exercises
+from src.database.crud import exercises
 
 from src.database.utils import object_as_dict
 from src.models.request.workouts import Workout

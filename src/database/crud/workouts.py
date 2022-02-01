@@ -5,7 +5,7 @@ from sqlalchemy.orm.session import make_transient
 from sqlalchemy.orm.exc import NoResultFound
 
 from src.models.crud import workouts
-from src.database import schemas
+from src.database import schemas, engine
 
 
 def create_workout(db: Session, workout: workouts.Workout, user):
@@ -28,8 +28,7 @@ def get_workout(db: Session, user, workout_id):
         .first()
     return workout.Workout
 
-
-def get_workouts(db: Session, user, **kwargs):
+def get_workouts(user_id: int, **kwargs):
     """ get workouts of the user
 
     Args:
@@ -39,18 +38,24 @@ def get_workouts(db: Session, user, **kwargs):
     Returns:
         [type]: [description]
     """
-    workouts = db.query(schemas.Workout).filter(schemas.Workout.user_id == user.id)
-    before = kwargs.get('before', None)
-    if before:
-        workouts = workouts.filter(schemas.Workout.started < before)
+    with Session(engine) as db:
+        workouts = db.query(schemas.Workout).filter(schemas.Workout.user_id == user_id)
 
-    workouts = workouts.order_by(schemas.Workout.started.desc())
-    
-    count = kwargs.get('count', None)
-    if count:
-        workouts = workouts.limit(count)
-    return workouts.all()
+        before = kwargs.get('before', None)
+        if before:
+            workouts = workouts.filter(schemas.Workout.started < before)
 
+        after = kwargs.get('after', None)
+        if after:
+            workouts = workouts.filter(after < schemas.Workout.started)
+
+        active = kwargs.get('active', None)
+        if active:
+            workouts = workouts.filter(schemas.Workout.active == True)
+
+        workouts = workouts.order_by(schemas.Workout.started.desc())
+        
+        return workouts.all()
 
 def get_active_workout(db: Session, user):
     active_workout = db.query(schemas.WorkoutTemplate, schemas.Workout) \

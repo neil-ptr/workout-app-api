@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from src.models.crud import exercises
-from src.database import schemas
+from src.database import schemas, engine
 
 
 def create_exercise(db: Session, exercise_template_id: int, workout_id: int):
@@ -23,7 +23,7 @@ def create_multiple_exercises(db: Session, exercise_template_ids, workoutId):
     db.commit()
     return new_exercises
 
-def get_exercise(db: Session, exercise_id: int, user_id: int): 
+def get_exercise(workout_id: int): 
     """ get single exercise by id
 
     Args:
@@ -34,9 +34,10 @@ def get_exercise(db: Session, exercise_id: int, user_id: int):
     Returns:
         [type]: [description]
     """
-    return db.query(schemas.Exercise) \
-        .filter(schemas.Exercise.id == exercise_id) \
-        .first()
+    with Session(engine) as db:
+        return db.query(schemas.Exercise) \
+            .filter(schemas.Exercise.workout_id == workout_id) \
+            .all()
 
 def get_exercises(db: Session, workout_id: int):
     """ get the exercises of a workout

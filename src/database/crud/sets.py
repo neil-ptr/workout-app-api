@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from src.models.crud.sets import Sets
-from src.database import schemas
+from src.database import schemas, engine
 
 
 def create_set(db: Session, set: Sets):
@@ -20,12 +20,7 @@ def create_set(db: Session, set: Sets):
     db.refresh(newSet)
     return newSet
 
-
-def get_sets_by_exercise(db: Session, exercise_id: int):
-    pass
-
-
-def get_sets(db: Session, exercise_id: int):
+def get_sets(exercise_id: int):
     """ get sets of an exercise
 
     Args:
@@ -35,9 +30,10 @@ def get_sets(db: Session, exercise_id: int):
     Returns:
         List[Set]: List of sets for exercise
     """
-    return db.query(schemas.Set) \
-        .filter(schemas.Set.exercise_id == exercise_id) \
-        .all()
+    with Session(engine) as db:
+        return db.query(schemas.Set) \
+            .filter(schemas.Set.exercise_id == exercise_id) \
+            .all()
 
 
 def update_set(db: Session, set_id: int, update_set):

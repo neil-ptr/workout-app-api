@@ -1,9 +1,9 @@
-from typing import List
+from typing import *
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
 
 from src.models.crud.templates import WorkoutTemplate, ExerciseTemplate
-from src.database import schemas
+from src.database import schemas, engine
 
 
 def create_workout_template(db: Session, workoutTemplate: WorkoutTemplate, user_id: int):
@@ -32,8 +32,13 @@ def create_workout_template(db: Session, workoutTemplate: WorkoutTemplate, user_
     db.refresh(newWorkoutTemplate)
     return newWorkoutTemplate
 
+def get_workout_template(workout_id: int):
+    with Session(engine) as db:
+        workoutTemplate = db.query(schemas.WorkoutTemplate).filter(
+        schemas.WorkoutTemplate.id == workout_id).first()
+        return workoutTemplate
 
-def get_workout_templates(db: Session, user_id: int):
+def get_workout_templates(user_id: int):
     """ get all workout templates of user
 
     Args:
@@ -43,9 +48,10 @@ def get_workout_templates(db: Session, user_id: int):
     Returns:
         (List[WorkoutTemplate]): all workout templates of user
     """
-    workoutTemplates = db.query(schemas.WorkoutTemplate).filter(
+    with Session(engine) as db:
+        workoutTemplates = db.query(schemas.WorkoutTemplate).filter(
         schemas.WorkoutTemplate.user_id == user_id).all()
-    return workoutTemplates
+        return workoutTemplates
 
 
 def delete_workout_template(db: Session, workout_id: int):
@@ -66,17 +72,26 @@ def delete_workout_template(db: Session, workout_id: int):
     db.commit()
 
 
-def create_exercise_template(db: Session, exerciseTemplate: ExerciseTemplate, workoutTemplateId: int):
-    new_exercise_template = schemas.ExerciseTemplate(
-        name=exerciseTemplate.name, workout_template_id=workoutTemplateId)
-    db.add(new_exercise_template)
-    db.commit()
-    db.refresh(new_exercise_template)
-    return new_exercise_template
+def create_exercise_template(exerciseTemplate: ExerciseTemplate, workoutTemplateId: int):
+    with Session(engine) as db:
+        new_exercise_template = schemas.ExerciseTemplate(
+            name=exerciseTemplate.name, workout_template_id=workoutTemplateId)
+        db.add(new_exercise_template)
+        db.commit()
+        db.refresh(new_exercise_template)
+        return new_exercise_template
 
 
-def get_exercise_templates(db: Session, workout_template_id: int):
-    query_constraint = schemas.ExerciseTemplate.workout_template_id == workout_template_id
-    exercise_templates = db.query(
-        schemas.ExerciseTemplate).filter(query_constraint).all()
-    return exercise_templates
+def get_exercise_templates(workout_template_id: int):
+    with Session(engine) as db:
+        query_constraint = schemas.ExerciseTemplate.workout_template_id == workout_template_id
+        exercise_templates = db.query(
+            schemas.ExerciseTemplate).filter(query_constraint).all()
+        return exercise_templates
+
+def get_exercise_template(exercise_template_id: int):
+    with Session(engine) as db:
+        query_constraint = schemas.ExerciseTemplate.id == exercise_template_id
+        exercise_templates = db.query(
+            schemas.ExerciseTemplate).filter(query_constraint).first()
+        return exercise_templates

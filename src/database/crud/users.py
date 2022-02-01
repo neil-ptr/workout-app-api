@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from src.database.database import engine
 
 from src.models.crud import users
 from src.database import schemas
@@ -13,8 +14,9 @@ def create_user(db: Session, user: users.UserCreate):
     return newUser
 
 
-def get_user(db: Session, user_id: int):
-    return db.query(schemas.User).filter(schemas.User.id == user_id).first()
+def get_user(user_id: int):
+    with Session(engine) as db:
+        return db.query(schemas.User).filter(schemas.User.id == user_id).first()
 
 
 def get_user_by_email(db: Session, email: str):
