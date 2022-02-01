@@ -19,5 +19,6 @@ def get_user(user_id: int):
         return db.query(schemas.User).filter(schemas.User.id == user_id).first()
 
 
-def get_user_by_email(db: Session, email: str):
-    return db.query(schemas.User).filter(schemas.User.email == email).first()
+def get_user_by_email(email: str) -> schemas.User:
+    with Session(engine) as db:
+        return db.query(schemas.User).filter(schemas.User.email == email).first()

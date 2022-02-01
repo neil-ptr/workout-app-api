@@ -6,7 +6,7 @@ from strawberry.asgi import GraphQL
 from src.middleware import catch_exceptions_middleware
 from src.routers import auth
 from src.database import schemas, engine
-from src.graphql.schemas import Query
+from src.graphql import Query, Mutation
 
 # init database
 schemas.Base.metadata.create_all(bind=engine)
@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-schema = strawberry.Schema(query=Query)
+schema = strawberry.Schema(query=Query, mutation=Mutation)
 
 graphql_app = GraphQL(schema)
 
